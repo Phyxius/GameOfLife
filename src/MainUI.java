@@ -12,8 +12,10 @@ public class MainUI extends JFrame
   public static final String PLAY_TEXT = "Play";
   public static final String PAUSE_TEXT = "Pause";
   public static final int BUTTON_PADDING = 5;
-  private final JButton playPauseButton, nextButton;
+  private final JButton playPauseButton, nextButton, resetButton, loadButton;
+  private final JSpinner threadSpinner;
   private final GameOfLifePanel gamePanel;
+  private final JComboBox<String> loadBox;
 
   public MainUI()
   {
@@ -28,15 +30,24 @@ public class MainUI extends JFrame
     playPauseButton.addActionListener(this::playPause);
     buttonPanel.add(playPauseButton);
     buttonPanel.add(Box.createHorizontalStrut(BUTTON_PADDING));
+    threadSpinner = new JSpinner(new SpinnerNumberModel(1, 1, Runtime.getRuntime().availableProcessors(), 1));
+    threadSpinner.setMaximumSize(threadSpinner.getPreferredSize());
+    buttonPanel.add(threadSpinner);
+    buttonPanel.add(new JLabel(" threads"));
+    buttonPanel.add(Box.createHorizontalStrut(BUTTON_PADDING));
     nextButton = new JButton("Next");
     nextButton.addActionListener(e -> gamePanel.advanceFrame());
     buttonPanel.add(nextButton);
+    buttonPanel.add(Box.createHorizontalStrut(BUTTON_PADDING));
+    resetButton = new JButton("Reset");
+    resetButton.addActionListener(e -> gamePanel.reset());
+    buttonPanel.add(resetButton);
     buttonPanel.add(Box.createHorizontalGlue());
-    JComboBox<String> loadBox = new JComboBox<>(new String[]{"Test 1", "Test 2"});
+    loadBox = new JComboBox<>(new String[]{"Test 1", "Test 2"});
     loadBox.setMaximumSize(loadBox.getPreferredSize());
     buttonPanel.add(loadBox);
     buttonPanel.add(Box.createHorizontalStrut(BUTTON_PADDING));
-    JButton loadButton = new JButton("Load");
+    loadButton = new JButton("Load");
     buttonPanel.add(loadButton);
 
     add(buttonPanel, BorderLayout.SOUTH);
@@ -47,15 +58,11 @@ public class MainUI extends JFrame
 
   private void playPause(ActionEvent e)
   {
-    if (playPauseButton.getText().equals(PLAY_TEXT))
+    boolean isPaused = playPauseButton.getText().equals(PLAY_TEXT);
+    playPauseButton.setText(isPaused ? PAUSE_TEXT : PLAY_TEXT);
+    for (JComponent c : new JComponent[] {nextButton, resetButton, loadButton, threadSpinner, loadBox})
     {
-      playPauseButton.setText(PAUSE_TEXT);
-      nextButton.setEnabled(false);
-    }
-    else
-    {
-      playPauseButton.setText(PLAY_TEXT);
-      nextButton.setEnabled(true);
+      c.setEnabled(!isPaused);
     }
     gamePanel.playPause();
   }
