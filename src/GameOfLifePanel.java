@@ -14,6 +14,7 @@ public class GameOfLifePanel extends JPanel
 
     public GameOfLifePanel()
     {
+        //All this GridBagLayout nonsense just to get a GridLayout with uneven cell sizes!
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.weightx = 1;
@@ -52,11 +53,5 @@ public class GameOfLifePanel extends JPanel
     public void advanceFrame()
     {
 
-    }
-
-    @Override
-    public Dimension getMaximumSize()
-    {
-        return new Dimension(20000, 20000);
     }
 }
