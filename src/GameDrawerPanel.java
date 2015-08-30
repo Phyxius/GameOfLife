@@ -7,14 +7,16 @@ import java.awt.*;
  */
 public class GameDrawerPanel extends JPanel
 {
-    public GameDrawerPanel()
-    {
 
-    }
-    @Override
-    public Dimension getPreferredSize()
-    {
-        return new Dimension(800, 600);
-    }
+  public GameDrawerPanel()
+  {
+
+  }
+
+  @Override
+  public Dimension getPreferredSize()
+  {
+    return new Dimension(800, 600);
+  }
 
 }
