@@ -27,6 +27,7 @@ public class GameDrawerPanel extends JPanel
     this.horizontalScrollBar = horizontalScrollBar;
     this.verticalScrollBar = verticalScrollBar;
     updateScrollBars();
+    resetToRandomState();
   }
 
   private void updateScrollBars()
