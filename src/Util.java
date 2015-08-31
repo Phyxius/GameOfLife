@@ -6,5 +6,15 @@ import java.util.Random;
  */
 public class Util
 {
+  private Util() throws Exception
+  {
+    throw new Exception();
+  }
+
   public static final Random RANDOM = new Random();
+
+  public static int clampInteger(int value, int min, int max)
+  {
+    return Math.min(max, Math.max(min, value));
+  }
 }
