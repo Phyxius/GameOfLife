@@ -11,6 +11,7 @@ import java.awt.event.MouseWheelEvent;
 public class GameDrawerPanel extends JPanel
 {
   public static final int GAME_SIZE = 10000;
+  public static final int MIN_GRID_SIZE = 5;
   private int pixelSize = 20, pixelOffsetX = 0, pixelOffsetY = 0;
   private final boolean[][] gameState = new boolean[GAME_SIZE + 2][GAME_SIZE + 2]; //account for border cells
   public GameDrawerPanel()
@@ -44,29 +45,34 @@ public class GameDrawerPanel extends JPanel
   {
     graphics.clearRect(0, 0, getWidth(), getHeight());
     graphics.setColor(Color.black);
-    for (int i = -1; i <= getWidth() / pixelSize; i++)
+    for (int i = -1; i <= getWidth() / pixelSize + 1; i++)
     {
-      for (int j = -1; j <= getHeight() / pixelSize; j++)
+      for (int j = -1; j <= getHeight() / pixelSize + 1; j++)
       {
         int curGridX = i + pixelOffsetX / pixelSize;
         int curGridY = j + pixelOffsetY / pixelSize;
         if (curGridX < 0 || curGridY < 0) continue;
         if (gameState[curGridX + 1][curGridY + 1])
         {
-          graphics.fillRect(i * pixelSize - pixelOffsetX % pixelSize, j * pixelSize - pixelOffsetY % pixelSize, pixelSize, pixelSize);
+          int pixelX = i * pixelSize - pixelOffsetX % pixelSize;
+          int pixelY = j * pixelSize - pixelOffsetY % pixelSize;
+          if (pixelSize == 1) graphics.drawLine(pixelX, pixelY, pixelX, pixelY); //should be slightly faster than fillRect
+          else graphics.fillRect(pixelX, pixelY, pixelSize, pixelSize);
         }
       }
     }
-    if (pixelSize >= 5)
+    if (pixelSize >= MIN_GRID_SIZE)
     {
       graphics.setColor(Color.gray);
-      for (int i = getWidth() - (pixelOffsetX % pixelSize); i >= 0; i-= pixelSize)
+      for (int i = 0; i <= getWidth() / pixelSize; i++)
       {
-        graphics.drawLine(i, 0, i, getHeight());
+        int pixelX = i * pixelSize - pixelOffsetX % pixelSize;
+        graphics.drawLine(pixelX, 0, pixelX, getHeight());
       }
-      for (int i = getHeight() - pixelOffsetY % pixelSize; i >= 0; i-= pixelSize)
+      for (int i = 0; i <= getHeight() / pixelSize; i ++)
       {
-        graphics.drawLine(0, i, getWidth(), i);
+        int pixelY = i * pixelSize - pixelOffsetY % pixelSize;
+        graphics.drawLine(0, pixelY, getWidth(), pixelY);
       }
     }
   }
