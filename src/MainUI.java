@@ -12,6 +12,7 @@ public class MainUI extends JFrame
   public static final String PLAY_TEXT = "Play";
   public static final String PAUSE_TEXT = "Pause";
   public static final int BUTTON_PADDING = 5;
+  public static final int AVAILABLE_PROCESSORS = Runtime.getRuntime().availableProcessors();
   private final JButton playPauseButton, nextButton, resetButton, loadButton;
   private final JSpinner threadSpinner;
   private final GameOfLifePanel gamePanel;
@@ -30,7 +31,7 @@ public class MainUI extends JFrame
     playPauseButton.addActionListener(this::playPause);
     buttonPanel.add(playPauseButton);
     addPadding(buttonPanel);
-    threadSpinner = new JSpinner(new SpinnerNumberModel(1, 1, Runtime.getRuntime().availableProcessors(), 1));
+    threadSpinner = new JSpinner(new SpinnerNumberModel(AVAILABLE_PROCESSORS, 1, AVAILABLE_PROCESSORS * 2, 1));
     threadSpinner.setMaximumSize(threadSpinner.getPreferredSize());
     buttonPanel.add(threadSpinner);
     buttonPanel.add(new JLabel(" threads"));
