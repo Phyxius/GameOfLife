@@ -138,7 +138,6 @@ public class GameDrawerPanel extends JPanel
     boolean[][] temp = gameState;
     gameState = nextGameState;
     nextGameState = temp;
-    System.out.println("Update");
     repaint(0);
     if (advanceSingleFrame)
     {
