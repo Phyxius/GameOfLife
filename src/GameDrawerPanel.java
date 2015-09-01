@@ -1,10 +1,7 @@
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
+import java.awt.event.*;
 import java.util.concurrent.CyclicBarrier;
 
 /**
@@ -34,6 +31,18 @@ public class GameDrawerPanel extends JPanel
     this.horizontalScrollBar = horizontalScrollBar;
     this.verticalScrollBar = verticalScrollBar;
     this.operationCompleteCallback = operationCompleteCallback;
+    getActionMap().put("Scroll Up", new RunnableActionAdapter(() -> scrollRelative(0, -pixelSize)));
+    getInputMap().put(KeyStroke.getKeyStroke("UP"), "Scroll Up");
+    getActionMap().put("Scroll Down", new RunnableActionAdapter(() -> scrollRelative(0, pixelSize)));
+    getInputMap().put(KeyStroke.getKeyStroke("DOWN"), "Scroll Down");
+    getActionMap().put("Scroll Left", new RunnableActionAdapter(() -> scrollRelative(-pixelSize, 0)));
+    getInputMap().put(KeyStroke.getKeyStroke("LEFT"), "Scroll Left");
+    getActionMap().put("Scroll Right", new RunnableActionAdapter(() -> scrollRelative(pixelSize, 0)));
+    getInputMap().put(KeyStroke.getKeyStroke("RIGHT"), "Scroll Right");
+    getActionMap().put("Page Up", new RunnableActionAdapter(() -> scrollRelative(0, -getHeight())));
+    getInputMap().put(KeyStroke.getKeyStroke("PAGE_UP"), "Page Up");
+    getActionMap().put("Page Down", new RunnableActionAdapter(() -> scrollRelative(0, getHeight())));
+    getInputMap().put(KeyStroke.getKeyStroke("PAGE_DOWN"), "Page Down");
     updateScrollBars();
     resetToRandomState(false);
   }
@@ -123,12 +132,12 @@ public class GameDrawerPanel extends JPanel
 
   private void onUpdateComplete()
   {
-    if (isRunning()) return;
+    if (synchronizationBarrier == null) return;
     boolean[][] temp = gameState;
     gameState = nextGameState;
     nextGameState = temp;
     System.out.println("Update");
-    repaint();
+    repaint(0);
     if (advanceSingleFrame)
     {
       stop();
@@ -138,7 +147,7 @@ public class GameDrawerPanel extends JPanel
 
   public void play(int threadCount)
   {
-    if (isRunning()) stop();
+    if (synchronizationBarrier != null) stop();
     synchronizationBarrier = new CyclicBarrier(threadCount, this::onUpdateComplete);
     updateThreads = new UpdateThread[threadCount];
     for (int i = 0; i < updateThreads.length; i++)
@@ -148,14 +157,9 @@ public class GameDrawerPanel extends JPanel
     }
   }
 
-  public boolean isRunning()
-  {
-    return synchronizationBarrier != null;
-  }
-
   public void stop()
   {
-    if (!isRunning()) return;
+    if (synchronizationBarrier == null) return;
     for (UpdateThread thread : updateThreads)
     {
       thread.end();
@@ -168,7 +172,7 @@ public class GameDrawerPanel extends JPanel
 
   public void advanceFrame(int threadCount)
   {
-    if (isRunning()) return;
+    if (synchronizationBarrier != null) return;
     advanceSingleFrame = true;
     play(threadCount);
   }
@@ -187,6 +191,7 @@ public class GameDrawerPanel extends JPanel
   {
     return new Dimension(getVisibleGridWidth(), getVisibleGridHeight());
   }
+
   public void scrollRelative(int xAmount, int yAmount)
   {
     pixelOffsetX = Util.clampInteger(pixelOffsetX + xAmount, 0, GAME_SIZE - getScreenGridSize().width);
@@ -215,6 +220,16 @@ public class GameDrawerPanel extends JPanel
     repaint();
   }
 
+  public Point screenToGridCoordinates(Point p)
+  {
+    return new Point((p.x + pixelOffsetX) / pixelSize, (p.y + pixelOffsetY) / pixelSize);
+  }
+
+  public void setZoom(int newSize)
+  {
+    pixelSize = Util.clampInteger(newSize, 1, 40);
+  }
+
   private class ResizeHandler extends ComponentAdapter
   {
     @Override
@@ -227,6 +242,7 @@ public class GameDrawerPanel extends JPanel
   private class MouseHandler extends MouseInputAdapter
   {
     Point currentPoint = new Point();
+
     @Override
     public void mousePressed(MouseEvent mouseEvent)
     {
@@ -247,17 +263,20 @@ public class GameDrawerPanel extends JPanel
       updateScrollBars();
       repaint();
     }
-
     @Override
     public void mouseDragged(MouseEvent mouseEvent)
     {
       scrollRelative(currentPoint.x - mouseEvent.getX(), currentPoint.y - mouseEvent.getY());
       currentPoint = mouseEvent.getPoint();
     }
-  }
 
-  public void setZoom(int newSize)
-  {
-    pixelSize = Util.clampInteger(newSize, 1, 40);
+    @Override
+    public void mouseClicked(MouseEvent e)
+    {
+      if (synchronizationBarrier != null) return;
+      Point gridPoint = screenToGridCoordinates(e.getPoint());
+      gameState[gridPoint.x + 1][gridPoint.y + 1] = !gameState[gridPoint.x + 1][gridPoint.y + 1];
+      repaint();
+    }
   }
 }
