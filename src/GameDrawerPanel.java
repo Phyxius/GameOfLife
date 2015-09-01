@@ -123,7 +123,7 @@ public class GameDrawerPanel extends JPanel
 
   private void onUpdateComplete()
   {
-    if (synchronizationBarrier == null) return;
+    if (isRunning()) return;
     boolean[][] temp = gameState;
     gameState = nextGameState;
     nextGameState = temp;
@@ -138,7 +138,7 @@ public class GameDrawerPanel extends JPanel
 
   public void play(int threadCount)
   {
-    if (synchronizationBarrier != null) stop();
+    if (isRunning()) stop();
     synchronizationBarrier = new CyclicBarrier(threadCount, this::onUpdateComplete);
     updateThreads = new UpdateThread[threadCount];
     for (int i = 0; i < updateThreads.length; i++)
@@ -148,9 +148,14 @@ public class GameDrawerPanel extends JPanel
     }
   }
 
+  public boolean isRunning()
+  {
+    return synchronizationBarrier != null;
+  }
+
   public void stop()
   {
-    if (synchronizationBarrier == null) return;
+    if (!isRunning()) return;
     for (UpdateThread thread : updateThreads)
     {
       thread.end();
@@ -163,7 +168,7 @@ public class GameDrawerPanel extends JPanel
 
   public void advanceFrame(int threadCount)
   {
-    if (synchronizationBarrier != null) return;
+    if (isRunning()) return;
     advanceSingleFrame = true;
     play(threadCount);
   }
