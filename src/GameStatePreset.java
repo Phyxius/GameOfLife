@@ -25,12 +25,12 @@ public abstract class GameStatePreset
   {
     for (int[] point : points)
     {
-      output[point[0]][point[1]] = true;
+      output[point[0] + 1][point[1] + 1] = true;
     }
   }
 
   //Life 1.06 format: http://www.conwaylife.com/wiki/Life_1.06
-  protected static void parseLifeString(String content, boolean[][] output)
+  protected static void parseLifeString(String content, int xOffset, int yOffset, boolean[][] output)
   {
     String[] lines = content.replace("\r","").split("\n");
     if (!lines[0].equals("#Life 1.06")) throw new IllegalArgumentException();
@@ -48,13 +48,13 @@ public abstract class GameStatePreset
     }
     for (Point point : points)
     {
-      output[point.x - minX][point.y - minY] = true;
+      output[point.x - minX + xOffset + 1][point.y - minY + yOffset + 1] = true;
     }
   }
 
-  protected static void parseLifeFile(String path, boolean[][] output)
+  protected static void parseLifeFile(String path, int xOffset, int yOffset, boolean[][] output)
   {
     final InputStream resourceStream = GameStatePreset.class.getResourceAsStream(path);
-    parseLifeString(new Scanner(resourceStream).useDelimiter("\\Z").next(), output);
+    parseLifeString(new Scanner(resourceStream).useDelimiter("\\Z").next(), xOffset, yOffset, output);
   }
 }
