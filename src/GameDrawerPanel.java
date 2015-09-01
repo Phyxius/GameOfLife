@@ -86,6 +86,7 @@ public class GameDrawerPanel extends JPanel
   @Override
   protected void paintComponent(Graphics graphics)
   {
+    super.paintComponent(graphics);
     graphics.clearRect(0, 0, getWidth(), getHeight());
     graphics.setColor(Color.black);
     for (int i = -1; i <= getVisibleGridWidth() + 1; i++)
@@ -125,7 +126,8 @@ public class GameDrawerPanel extends JPanel
     if (synchronizationBarrier == null) return;
     boolean[][] temp = gameState;
     gameState = nextGameState;
-    gameState = temp;
+    nextGameState = temp;
+    System.out.println("Update");
     repaint();
     if (advanceSingleFrame)
     {
