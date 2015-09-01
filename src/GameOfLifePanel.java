@@ -7,8 +7,6 @@ import java.awt.*;
  */
 public class GameOfLifePanel extends JPanel
 {
-  private final JScrollBar horizontalScrollBar;
-  private final JScrollBar verticalScrollBar;
   private final GameDrawerPanel gameDrawerPanel;
   private boolean isRunning = false;
 
@@ -24,8 +22,8 @@ public class GameOfLifePanel extends JPanel
     c.gridwidth = 1;
     c.gridheight = 1;
     c.fill = GridBagConstraints.BOTH;
-    verticalScrollBar = new JScrollBar(Adjustable.VERTICAL);
-    horizontalScrollBar = new JScrollBar(Adjustable.HORIZONTAL);
+    JScrollBar verticalScrollBar = new JScrollBar(Adjustable.VERTICAL);
+    JScrollBar horizontalScrollBar = new JScrollBar(Adjustable.HORIZONTAL);
     gameDrawerPanel = new GameDrawerPanel(horizontalScrollBar, verticalScrollBar);
     horizontalScrollBar.addAdjustmentListener(e -> gameDrawerPanel.scrollXAbsolute(e.getValue()));
     verticalScrollBar.addAdjustmentListener(e -> gameDrawerPanel.scrollYAbsolute(e.getValue()));
