@@ -21,7 +21,7 @@ public class MainUI extends JFrame
   {
     super("Conway's Game of Life");
     setLayout(new BorderLayout());
-    gamePanel = new GameOfLifePanel();
+    gamePanel = new GameOfLifePanel(this::toggleUIEnabled);
     add(gamePanel);
     JPanel buttonPanel = new JPanel();
     BoxLayout box = new BoxLayout(buttonPanel, BoxLayout.X_AXIS);
@@ -36,11 +36,11 @@ public class MainUI extends JFrame
     buttonPanel.add(new JLabel(" threads"));
     buttonPanel.add(Box.createHorizontalStrut(BUTTON_PADDING));
     nextButton = new JButton("Next");
-    nextButton.addActionListener(e -> gamePanel.advanceFrame());
+    nextButton.addActionListener(this::advanceFrame);
     buttonPanel.add(nextButton);
     buttonPanel.add(Box.createHorizontalStrut(BUTTON_PADDING));
     resetButton = new JButton("Reset");
-    resetButton.addActionListener(e -> gamePanel.reset());
+    resetButton.addActionListener(this::reset);
     buttonPanel.add(resetButton);
     buttonPanel.add(Box.createHorizontalGlue());
     loadBox = new JComboBox<>(GameStatePresets.getPresets());
@@ -50,21 +50,39 @@ public class MainUI extends JFrame
     loadButton = new JButton("Load");
     loadButton.addActionListener(e -> gamePanel.load((GameStatePreset)loadBox.getSelectedItem()));
     buttonPanel.add(loadButton);
-
     add(buttonPanel, BorderLayout.SOUTH);
 
     pack();
     setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
   }
 
+  private void reset(ActionEvent e)
+  {
+    toggleUIEnabled();
+    playPauseButton.setEnabled(false);
+    gamePanel.reset();
+  }
+
   private void playPause(ActionEvent e)
+  {
+    toggleUIEnabled();
+    gamePanel.playPause((int) threadSpinner.getValue());
+  }
+
+  private void advanceFrame(ActionEvent e)
+  {
+    toggleUIEnabled();
+    gamePanel.advanceFrame((int) threadSpinner.getValue());
+  }
+
+  private void toggleUIEnabled()
   {
     boolean isPaused = playPauseButton.getText().equals(PLAY_TEXT);
     playPauseButton.setText(isPaused ? PAUSE_TEXT : PLAY_TEXT);
+    playPauseButton.setEnabled(true);
     for (JComponent c : new JComponent[] {nextButton, resetButton, loadButton, threadSpinner, loadBox})
     {
       c.setEnabled(!isPaused);
     }
-    gamePanel.playPause((int) threadSpinner.getValue());
   }
 }

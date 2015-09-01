@@ -10,7 +10,7 @@ public class GameOfLifePanel extends JPanel
   private final GameDrawerPanel gameDrawerPanel;
   private boolean isRunning = false;
 
-  public GameOfLifePanel()
+  public GameOfLifePanel(Runnable operationCompleteCallback)
   {
     //All this GridBagLayout nonsense just to get a GridLayout with uneven cell sizes!
     setLayout(new GridBagLayout());
@@ -24,7 +24,7 @@ public class GameOfLifePanel extends JPanel
     c.fill = GridBagConstraints.BOTH;
     JScrollBar verticalScrollBar = new JScrollBar(Adjustable.VERTICAL);
     JScrollBar horizontalScrollBar = new JScrollBar(Adjustable.HORIZONTAL);
-    gameDrawerPanel = new GameDrawerPanel(horizontalScrollBar, verticalScrollBar);
+    gameDrawerPanel = new GameDrawerPanel(horizontalScrollBar, verticalScrollBar, operationCompleteCallback);
     horizontalScrollBar.addAdjustmentListener(e -> gameDrawerPanel.scrollXAbsolute(e.getValue()));
     verticalScrollBar.addAdjustmentListener(e -> gameDrawerPanel.scrollYAbsolute(e.getValue()));
     add(gameDrawerPanel, c);
@@ -51,12 +51,12 @@ public class GameOfLifePanel extends JPanel
 
   public void reset()
   {
-    gameDrawerPanel.resetToRandomState();
+    new Thread(() -> gameDrawerPanel.resetToRandomState(true)).start();
   }
 
-  public void advanceFrame()
+  public void advanceFrame(int threadCount)
   {
-
+    gameDrawerPanel.advanceFrame(threadCount);
   }
 
   public void load(GameStatePreset preset)

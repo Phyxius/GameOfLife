@@ -18,11 +18,13 @@ public class GameDrawerPanel extends JPanel
   private int pixelSize = 20, pixelOffsetX = 0, pixelOffsetY = 0;
   private boolean[][] gameState = new boolean[GAME_SIZE + 2][GAME_SIZE + 2]; //account for border cells, [x][y]
   private boolean[][] nextGameState = new boolean[gameState.length][gameState[0].length];
+  private boolean advanceSingleFrame = false;
   private final JScrollBar horizontalScrollBar, verticalScrollBar;
+  private final Runnable operationCompleteCallback;
   private CyclicBarrier synchronizationBarrier;
   private UpdateThread[] updateThreads;
 
-  public GameDrawerPanel(JScrollBar horizontalScrollBar, JScrollBar verticalScrollBar)
+  public GameDrawerPanel(JScrollBar horizontalScrollBar, JScrollBar verticalScrollBar, Runnable operationCompleteCallback)
   {
     MouseHandler m = new MouseHandler();
     addMouseListener(m);
@@ -31,8 +33,9 @@ public class GameDrawerPanel extends JPanel
     addComponentListener(new ResizeHandler());
     this.horizontalScrollBar = horizontalScrollBar;
     this.verticalScrollBar = verticalScrollBar;
+    this.operationCompleteCallback = operationCompleteCallback;
     updateScrollBars();
-    resetToRandomState();
+    resetToRandomState(false);
   }
 
   private void updateScrollBars()
@@ -47,7 +50,7 @@ public class GameDrawerPanel extends JPanel
     return new Dimension(800, 600);
   }
 
-  public void resetToRandomState()
+  public void resetToRandomState(boolean triggerCallback)
   {
     for (int i = 1; i <= GAME_SIZE; i++)
     {
@@ -57,6 +60,7 @@ public class GameDrawerPanel extends JPanel
       }
     }
     repaint();
+    if (triggerCallback) operationCompleteCallback.run();
   }
 
   private void resetToBlankState()
@@ -123,6 +127,11 @@ public class GameDrawerPanel extends JPanel
     gameState = nextGameState;
     gameState = temp;
     repaint();
+    if (advanceSingleFrame)
+    {
+      stop();
+      operationCompleteCallback.run();
+    }
   }
 
   public void play(int threadCount)
@@ -147,6 +156,14 @@ public class GameDrawerPanel extends JPanel
     synchronizationBarrier.reset();
     updateThreads = null;
     synchronizationBarrier = null;
+    advanceSingleFrame = false;
+  }
+
+  public void advanceFrame(int threadCount)
+  {
+    if (synchronizationBarrier != null) return;
+    advanceSingleFrame = true;
+    play(threadCount);
   }
 
   private int getVisibleGridHeight()
