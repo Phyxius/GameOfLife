@@ -144,4 +144,19 @@ public class GameStatePresets
       return "Fermat Prime Calculator";
     }
   }
+
+  public static class Blank extends GameStatePreset
+  {
+    @Override
+    public void loadState(boolean[][] output)
+    {
+
+    }
+
+    @Override
+    public String toString()
+    {
+      return "Blank";
+    }
+  }
 }

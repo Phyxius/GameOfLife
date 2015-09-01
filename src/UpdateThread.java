@@ -38,7 +38,17 @@ public class UpdateThread extends Thread
         for(int j = curThreadIndex * numCellsToProcess; j < stopAt; j++)
         {
           if (hasEnded) break main;
-          destination[i + 1][j + 1] = getNextCellState(i, j);
+          int neighborCount = 0;
+          boolean ret;
+          for (int k = 0; k < neighborDeltas.length; k += 2)
+          {
+            if (source[i + 1 + neighborDeltas[k]][j + 1 + neighborDeltas[k + 1]]) neighborCount++; //+1 accounts for border cells
+          }
+          if (source[i + 1][j + 1])
+          {
+            destination[i + 1][j + 1] = neighborCount >= 2 && neighborCount <= 3; //+1 to account for border cells
+          }
+          else destination[i + 1][j + 1] = neighborCount == 3;
         }
       }
       boolean[][] temp = source;
@@ -53,23 +63,6 @@ public class UpdateThread extends Thread
         break;
       }
     }
-  }
-
-  private int getLivingNeighborsCount(int x, int y)
-  {
-    int count = 0;
-    for (int i = 0; i < neighborDeltas.length; i += 2)
-    {
-      if (source[x + 1 + neighborDeltas[i]][y + 1 + neighborDeltas[1 + 1]]) count++; //+1 accounts for border cells
-    }
-    return count;
-  }
-
-  private boolean getNextCellState(int x, int y)
-  {
-    int neighborCount = getLivingNeighborsCount(x, y);
-    if (source[x + 1][y + 1]) return neighborCount >= 2 && neighborCount <= 3; //+1 to account for border cells
-    return neighborCount == 3;
   }
 
   public void end()
