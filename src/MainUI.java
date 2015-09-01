@@ -29,16 +29,16 @@ public class MainUI extends JFrame
     playPauseButton = new JButton(PLAY_TEXT);
     playPauseButton.addActionListener(this::playPause);
     buttonPanel.add(playPauseButton);
-    buttonPanel.add(Box.createHorizontalStrut(BUTTON_PADDING));
+    addPadding(buttonPanel);
     threadSpinner = new JSpinner(new SpinnerNumberModel(1, 1, Runtime.getRuntime().availableProcessors(), 1));
     threadSpinner.setMaximumSize(threadSpinner.getPreferredSize());
     buttonPanel.add(threadSpinner);
     buttonPanel.add(new JLabel(" threads"));
-    buttonPanel.add(Box.createHorizontalStrut(BUTTON_PADDING));
+    addPadding(buttonPanel);
     nextButton = new JButton("Next");
     nextButton.addActionListener(this::advanceFrame);
     buttonPanel.add(nextButton);
-    buttonPanel.add(Box.createHorizontalStrut(BUTTON_PADDING));
+    addPadding(buttonPanel);
     resetButton = new JButton("Reset");
     resetButton.addActionListener(this::reset);
     buttonPanel.add(resetButton);
@@ -46,7 +46,7 @@ public class MainUI extends JFrame
     loadBox = new JComboBox<>(GameStatePresets.getPresets());
     loadBox.setMaximumSize(loadBox.getPreferredSize());
     buttonPanel.add(loadBox);
-    buttonPanel.add(Box.createHorizontalStrut(BUTTON_PADDING));
+    addPadding(buttonPanel);
     loadButton = new JButton("Load");
     loadButton.addActionListener(e -> gamePanel.load((GameStatePreset)loadBox.getSelectedItem()));
     buttonPanel.add(loadButton);
@@ -54,6 +54,11 @@ public class MainUI extends JFrame
 
     pack();
     setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+  }
+
+  private void addPadding(JPanel buttonPanel)
+  {
+    buttonPanel.add(Box.createHorizontalStrut(BUTTON_PADDING));
   }
 
   private void reset(ActionEvent e)
