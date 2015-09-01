@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -40,6 +41,28 @@ public class GameStatePresets
     public String toString()
     {
       return "Sliders";
+    }
+  }
+
+  //from: http://www.conwaylife.com/wiki/Turing_machine
+  public static class TuringMachine extends GameStatePreset
+  {
+    @Override
+    public void loadState(boolean[][] output)
+    {
+      parseLifeFile("turingmachine_106.lif", output);
+    }
+
+    @Override
+    public int getInitialPixelSize()
+    {
+      return 1;
+    }
+
+    @Override
+    public String toString()
+    {
+      return "Turing Machine";
     }
   }
 }

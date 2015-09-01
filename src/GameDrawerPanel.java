@@ -75,6 +75,8 @@ public class GameDrawerPanel extends JPanel
   {
     resetToBlankState();
     preset.loadState(gameState);
+    scrollAbsolute(preset.getInitialViewport().x, preset.getInitialViewport().y);
+    setZoom(preset.getInitialPixelSize());
   }
 
   @Override
@@ -216,7 +218,8 @@ public class GameDrawerPanel extends JPanel
     @Override
     public void mouseWheelMoved(MouseWheelEvent e)
     {
-      pixelSize = Util.clampInteger(pixelSize + e.getWheelRotation(), 1, 40);
+      int newSize = pixelSize + e.getWheelRotation();
+      setZoom(newSize);
       updateScrollBars();
       repaint();
     }
@@ -227,5 +230,10 @@ public class GameDrawerPanel extends JPanel
       scrollRelative(currentPoint.x - mouseEvent.getX(), currentPoint.y - mouseEvent.getY());
       currentPoint = mouseEvent.getPoint();
     }
+  }
+
+  public void setZoom(int newSize)
+  {
+    pixelSize = Util.clampInteger(newSize, 1, 40);
   }
 }
