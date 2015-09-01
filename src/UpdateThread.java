@@ -30,13 +30,14 @@ public class UpdateThread extends Thread
     while (!hasEnded)
     {
       final int gridWidth = source.length - 2, gridHeight = source[0].length - 2;
-      final int cellCount = gridHeight * gridWidth;
-      for (int i = threadIndex; i < cellCount; i += threadCount)
+      for (int i = 0; i < gridHeight; i ++)
       {
-        if (hasEnded) break main;
-        final int gridX = i % gridWidth;
-        final int gridY = i / gridHeight;
-        destination[gridX + 1][gridY + 1] = getNextCellState(gridX, gridY);
+        int stopAt = Math.min((threadIndex + 1) * (gridWidth / threadCount + 1), gridWidth);
+        for(int j = threadIndex * (gridWidth / threadCount + 1); j < stopAt; j++)
+        {
+          if (hasEnded) break main;
+          destination[i + 1][j + 1] = getNextCellState(i, j);
+        }
       }
       boolean[][] temp = source;
       source = destination;
