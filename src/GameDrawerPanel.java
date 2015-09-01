@@ -12,6 +12,8 @@ public class GameDrawerPanel extends JPanel
 {
   public static final int GAME_SIZE = 10000;
   public static final int MIN_GRID_SIZE = 5;
+  public static final int MIN_PIXEL_SIZE = 1;
+  public static final int MAX_PIXEL_SIZE = 50;
   private int pixelSize = 20, pixelOffsetX = 0, pixelOffsetY = 0;
   private boolean[][] gameState = new boolean[GAME_SIZE + 2][GAME_SIZE + 2]; //account for border cells, [x][y]
   private boolean[][] nextGameState = new boolean[gameState.length][gameState[0].length];
@@ -227,7 +229,7 @@ public class GameDrawerPanel extends JPanel
 
   public void setZoom(int newSize)
   {
-    pixelSize = Util.clampInteger(newSize, 1, 40);
+    pixelSize = Util.clampInteger(newSize, MIN_PIXEL_SIZE, MAX_PIXEL_SIZE);
   }
 
   private class ResizeHandler extends ComponentAdapter
