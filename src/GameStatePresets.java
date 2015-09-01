@@ -44,6 +44,28 @@ public class GameStatePresets
     }
   }
 
+  //from: http://conwaylife.com/wiki/3-engine_Cordership_gun
+  public static class ShipGun extends GameStatePreset
+  {
+    @Override
+    public void loadState(boolean[][] output)
+    {
+      parseLifeFile("3enginecordershipgun_106.lif", output);
+    }
+
+    @Override
+    public int getInitialPixelSize()
+    {
+      return 2;
+    }
+
+    @Override
+    public String toString()
+    {
+      return "Ship Gun";
+    }
+  }
+
   //from: http://www.conwaylife.com/wiki/Turing_machine
   public static class TuringMachine extends GameStatePreset
   {
