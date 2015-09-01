@@ -7,7 +7,7 @@ import java.util.concurrent.CyclicBarrier;
  */
 public class UpdateThread extends Thread
 {
-  private static final int[][] neighborDeltas = new int[][] { {0, 1}, {0, -1}, {1, 0}, {1, 1}, {1, -1}, {-1, 0}, {-1, 1}, {-1, -1} };
+  private static final int[] neighborDeltas = new int[] { 0, 1, 0, -1, 1, 0, 1, 1, 1, -1, -1, 0, -1, 1, -1, -1 };
   private boolean[][] source;
   private boolean[][] destination;
   private final int threadCount, threadIndex;
@@ -55,7 +55,10 @@ public class UpdateThread extends Thread
   private int getLivingNeighborsCount(int x, int y)
   {
     int count = 0;
-    for(int[] delta : neighborDeltas) if (source[x + 1 + delta[0]][y + 1 + delta[1]]) count++; //+1 accounts for border cells
+    for (int i = 0; i < neighborDeltas.length; i += 2)
+    {
+      if (source[x + 1 + neighborDeltas[i]][y + 1 + neighborDeltas[1 + 1]]) count++; //+1 accounts for border cells
+    }
     return count;
   }
 
