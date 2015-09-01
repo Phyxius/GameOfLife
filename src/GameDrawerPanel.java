@@ -5,6 +5,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import java.util.concurrent.CyclicBarrier;
 
 /**
  * Shea Polansky
@@ -15,8 +16,12 @@ public class GameDrawerPanel extends JPanel
   public static final int GAME_SIZE = 10000;
   public static final int MIN_GRID_SIZE = 5;
   private int pixelSize = 20, pixelOffsetX = 0, pixelOffsetY = 0;
-  private final boolean[][] gameState = new boolean[GAME_SIZE + 2][GAME_SIZE + 2]; //account for border cells
+  private boolean[][] gameState = new boolean[GAME_SIZE + 2][GAME_SIZE + 2]; //account for border cells, [x][y]
+  private boolean[][] nextGameState = new boolean[gameState.length][gameState[0].length];
   private final JScrollBar horizontalScrollBar, verticalScrollBar;
+  private CyclicBarrier synchronizationBarrier;
+  private UpdateThread[] updateThreads;
+
   public GameDrawerPanel(JScrollBar horizontalScrollBar, JScrollBar verticalScrollBar)
   {
     MouseHandler m = new MouseHandler();
@@ -89,6 +94,39 @@ public class GameDrawerPanel extends JPanel
         graphics.drawLine(0, pixelY, getWidth(), pixelY);
       }
     }
+  }
+
+  private void onUpdateComplete()
+  {
+    if (synchronizationBarrier == null) return;
+    boolean[][] temp = gameState;
+    gameState = nextGameState;
+    gameState = temp;
+    repaint();
+  }
+
+  public void play(int threadCount)
+  {
+    if (synchronizationBarrier != null) stop();
+    synchronizationBarrier = new CyclicBarrier(threadCount, this::onUpdateComplete);
+    updateThreads = new UpdateThread[threadCount];
+    for (int i = 0; i < updateThreads.length; i++)
+    {
+      updateThreads[i] = new UpdateThread(gameState, nextGameState, threadCount, i, synchronizationBarrier);
+      updateThreads[i].start();
+    }
+  }
+
+  public void stop()
+  {
+    if (synchronizationBarrier == null) return;
+    for (UpdateThread thread : updateThreads)
+    {
+      thread.end();
+    }
+    synchronizationBarrier.reset();
+    updateThreads = null;
+    synchronizationBarrier = null;
   }
 
   private int getVisibleGridHeight()

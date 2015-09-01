@@ -7,10 +7,10 @@ import java.awt.*;
  */
 public class GameOfLifePanel extends JPanel
 {
-
   private final JScrollBar horizontalScrollBar;
   private final JScrollBar verticalScrollBar;
   private final GameDrawerPanel gameDrawerPanel;
+  private boolean isRunning = false;
 
   public GameOfLifePanel()
   {
@@ -44,9 +44,11 @@ public class GameOfLifePanel extends JPanel
     add(horizontalScrollBar, c);
   }
 
-  public void playPause()
+  public void playPause(int threadCount)
   {
-
+    if (isRunning) gameDrawerPanel.stop();
+    else gameDrawerPanel.play(threadCount);
+    isRunning = !isRunning;
   }
 
   public void reset()

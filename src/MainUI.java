@@ -64,6 +64,6 @@ public class MainUI extends JFrame
     {
       c.setEnabled(!isPaused);
     }
-    gamePanel.playPause();
+    gamePanel.playPause((int) threadSpinner.getValue());
   }
 }
