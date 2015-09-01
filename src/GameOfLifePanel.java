@@ -3,7 +3,7 @@ import java.awt.*;
 
 /**
  * Shea Polansky
- * Class name and description goes here
+ * GameOfLifePanel: Contains a GameDrawerPanel and its associated scroll bars
  */
 public class GameOfLifePanel extends JPanel
 {
@@ -42,6 +42,12 @@ public class GameOfLifePanel extends JPanel
     add(horizontalScrollBar, c);
   }
 
+  /**
+   * Plays/pauses the Life simulation.
+   * If it is currently running, it will be stopped.
+   * If it is currently stopped, it is started with the specified number of threads.
+   * @param threadCount the number of threads to use to simulate Life
+   */
   public void playPause(int threadCount)
   {
     if (isRunning) gameDrawerPanel.stop();
@@ -49,16 +55,27 @@ public class GameOfLifePanel extends JPanel
     isRunning = !isRunning;
   }
 
+  /**
+   * Resets the simulation to a new random state
+   */
   public void reset()
   {
     new Thread(() -> gameDrawerPanel.resetToRandomState(true)).start();
   }
 
+  /**
+   * instructs the simulation to advance a single step
+   * @param threadCount the number of threads to use to simulate Life
+   */
   public void advanceFrame(int threadCount)
   {
     gameDrawerPanel.advanceFrame(threadCount);
   }
 
+  /**
+   * loads a game state from a preset
+   * @param preset the preset to load
+   */
   public void load(GameStatePreset preset)
   {
     gameDrawerPanel.loadState(preset);
