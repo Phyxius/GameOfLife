@@ -58,4 +58,9 @@ public class GameOfLifePanel extends JPanel
   {
 
   }
+
+  public void load(GameStatePreset preset)
+  {
+    gameDrawerPanel.loadState(preset);
+  }
 }

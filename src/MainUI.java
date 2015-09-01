@@ -15,7 +15,7 @@ public class MainUI extends JFrame
   private final JButton playPauseButton, nextButton, resetButton, loadButton;
   private final JSpinner threadSpinner;
   private final GameOfLifePanel gamePanel;
-  private final JComboBox<String> loadBox;
+  private final JComboBox<GameStatePreset> loadBox;
 
   public MainUI()
   {
@@ -43,11 +43,12 @@ public class MainUI extends JFrame
     resetButton.addActionListener(e -> gamePanel.reset());
     buttonPanel.add(resetButton);
     buttonPanel.add(Box.createHorizontalGlue());
-    loadBox = new JComboBox<>(new String[]{"Test 1", "Test 2"});
+    loadBox = new JComboBox<>(GameStatePresets.getPresets());
     loadBox.setMaximumSize(loadBox.getPreferredSize());
     buttonPanel.add(loadBox);
     buttonPanel.add(Box.createHorizontalStrut(BUTTON_PADDING));
     loadButton = new JButton("Load");
+    loadButton.addActionListener(e -> gamePanel.load((GameStatePreset)loadBox.getSelectedItem()));
     buttonPanel.add(loadButton);
 
     add(buttonPanel, BorderLayout.SOUTH);

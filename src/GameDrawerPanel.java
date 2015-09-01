@@ -59,6 +59,24 @@ public class GameDrawerPanel extends JPanel
     repaint();
   }
 
+  private void resetToBlankState()
+  {
+    for (int i = 1; i <= GAME_SIZE; i++)
+    {
+      for (int j = 1; j <= GAME_SIZE; j++)
+      {
+        gameState[i][j] = false;
+      }
+    }
+    repaint();
+  }
+
+  public void loadState(GameStatePreset preset)
+  {
+    resetToBlankState();
+    preset.loadState(gameState);
+  }
+
   @Override
   protected void paintComponent(Graphics graphics)
   {
@@ -147,6 +165,14 @@ public class GameDrawerPanel extends JPanel
   {
     pixelOffsetX = Util.clampInteger(pixelOffsetX + xAmount, 0, GAME_SIZE - getScreenGridSize().width);
     pixelOffsetY = Util.clampInteger(pixelOffsetY + yAmount, 0, GAME_SIZE - getScreenGridSize().height);
+    updateScrollBars();
+    repaint();
+  }
+
+  public void scrollAbsolute(int x, int y)
+  {
+    pixelOffsetX = x;
+    pixelOffsetY = y;
     updateScrollBars();
     repaint();
   }
