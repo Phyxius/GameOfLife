@@ -8,13 +8,13 @@ import java.awt.event.ActionEvent;
  * Contains several buttons, a drop down for preset loading, a spinner for thread count selection,
  * and the main simulator panel.
  */
-public class MainUI extends JFrame
+class MainUI extends JFrame
 {
 
-  public static final String PLAY_TEXT = "Play";
-  public static final String PAUSE_TEXT = "Pause";
-  public static final int BUTTON_PADDING = 5;
-  public static final int AVAILABLE_PROCESSORS = Runtime.getRuntime().availableProcessors();
+  private static final String PLAY_TEXT = "Play";
+  private static final String PAUSE_TEXT = "Pause";
+  private static final int BUTTON_PADDING = 5;
+  private static final int AVAILABLE_PROCESSORS = Runtime.getRuntime().availableProcessors();
   private final JButton playPauseButton, nextButton, resetButton, loadButton;
   private final JSpinner threadSpinner;
   private final GameOfLifePanel gamePanel;

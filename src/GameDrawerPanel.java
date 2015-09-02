@@ -9,12 +9,12 @@ import java.util.concurrent.CyclicBarrier;
  * GameDrawerPanel: draws a Life simulation, manages updates for the simulation, and provides
  * an external interface to control the simulation
  */
-public class GameDrawerPanel extends JPanel
+class GameDrawerPanel extends JPanel
 {
-  public static final int GAME_SIZE = 10000;
-  public static final int MIN_GRID_SIZE = 5;
-  public static final int MIN_PIXEL_SIZE = 1;
-  public static final int MAX_PIXEL_SIZE = 50;
+  private static final int GAME_SIZE = 10000;
+  private static final int MIN_GRID_SIZE = 5;
+  private static final int MIN_PIXEL_SIZE = 1;
+  private static final int MAX_PIXEL_SIZE = 50;
   private int pixelSize = 20, pixelOffsetX = 0, pixelOffsetY = 0;
   private boolean[][] gameState = new boolean[GAME_SIZE + 2][GAME_SIZE + 2]; //account for border cells, [x][y]
   private boolean[][] nextGameState = new boolean[gameState.length][gameState[0].length];
@@ -228,7 +228,7 @@ public class GameDrawerPanel extends JPanel
   /**
    * @return the dimensions of the visible portion of the grid
    */
-  public Dimension getScreenGridSize()
+  private Dimension getScreenGridSize()
   {
     return new Dimension(getVisibleGridWidth(), getVisibleGridHeight());
   }
@@ -238,7 +238,7 @@ public class GameDrawerPanel extends JPanel
    * @param xAmount the amount to move in the x direction
    * @param yAmount the amount to move in the y direction
    */
-  public void scrollRelative(int xAmount, int yAmount)
+  private void scrollRelative(int xAmount, int yAmount)
   {
     pixelOffsetX = Util.clampInteger(pixelOffsetX + xAmount, 0, GAME_SIZE - getScreenGridSize().width);
     pixelOffsetY = Util.clampInteger(pixelOffsetY + yAmount, 0, GAME_SIZE - getScreenGridSize().height);
@@ -251,7 +251,7 @@ public class GameDrawerPanel extends JPanel
    * @param x the x to set
    * @param y the y to set
    */
-  public void scrollAbsolute(int x, int y)
+  private void scrollAbsolute(int x, int y)
   {
     pixelOffsetX = x;
     pixelOffsetY = y;
@@ -284,7 +284,7 @@ public class GameDrawerPanel extends JPanel
    * @param p the point to convert
    * @return the converted point
    */
-  public Point screenToGridCoordinates(Point p)
+  private Point screenToGridCoordinates(Point p)
   {
     return new Point((p.x + pixelOffsetX) / pixelSize, (p.y + pixelOffsetY) / pixelSize);
   }
@@ -293,7 +293,7 @@ public class GameDrawerPanel extends JPanel
    * Sets the zoom level to the specified size, clamped to be between MIN_PIXEL_SIZE and MAX_PIXEL_SIZE
    * @param newSize new size of a single pixel
    */
-  public void setZoom(int newSize)
+  private void setZoom(int newSize)
   {
     pixelSize = Util.clampInteger(newSize, MIN_PIXEL_SIZE, MAX_PIXEL_SIZE);
   }
@@ -321,12 +321,6 @@ public class GameDrawerPanel extends JPanel
     public void mousePressed(MouseEvent mouseEvent)
     {
       currentPoint = mouseEvent.getPoint();
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent mouseEvent)
-    {
-      super.mouseReleased(mouseEvent);
     }
 
     @Override

@@ -54,7 +54,7 @@ public abstract class GameStatePreset
    * @param yOffset the y offset (from y=0). All points will have their y-values added to this.
    * @param output the grid to output to
    */
-  protected static void parseLifeString(String content, int xOffset, int yOffset, boolean[][] output)
+  private static void parseLifeString(String content, int xOffset, int yOffset, boolean[][] output)
   {
     String[] lines = content.replace("\r","").split("\n");
     if (!lines[0].equals("#Life 1.06")) throw new IllegalArgumentException();
@@ -83,7 +83,7 @@ public abstract class GameStatePreset
    * @param yOffset the y offset
    * @param output the grid to output to
    */
-  protected static void parseLifeFile(String path, int xOffset, int yOffset, boolean[][] output)
+  static void parseLifeFile(String path, int xOffset, int yOffset, boolean[][] output)
   {
     final InputStream resourceStream = GameStatePreset.class.getResourceAsStream(path);
     parseLifeString(new Scanner(resourceStream).useDelimiter("\\Z").next(), xOffset, yOffset, output);

@@ -4,7 +4,7 @@ import javax.swing.*;
  * Shea Polansky
  * The main class
  */
-public class Main
+class Main
 {
   public static void main(String[] args)
   {

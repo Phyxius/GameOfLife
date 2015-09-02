@@ -5,7 +5,7 @@ import java.awt.*;
  * Shea Polansky
  * GameOfLifePanel: Contains a GameDrawerPanel and its associated scroll bars
  */
-public class GameOfLifePanel extends JPanel
+class GameOfLifePanel extends JPanel
 {
   private final GameDrawerPanel gameDrawerPanel;
   private boolean isRunning = false;

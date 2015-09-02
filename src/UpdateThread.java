@@ -5,7 +5,7 @@ import java.util.concurrent.CyclicBarrier;
  * Shea Polansky
  * UpdateThread: updates a game of life simulation, synchronized with other threads.
  */
-public class UpdateThread extends Thread
+class UpdateThread extends Thread
 {
   private static final int[] neighborDeltas = new int[] { 0, 1, 0, -1, 1, 0, 1, 1, 1, -1, -1, 0, -1, 1, -1, -1 };
   private boolean[][] source;
@@ -42,7 +42,6 @@ public class UpdateThread extends Thread
         {
           if (hasEnded) break main;
           int neighborCount = 0;
-          boolean ret;
           for (int k = 0; k < neighborDeltas.length; k += 2)
           {
             if (source[i + 1 + neighborDeltas[k]][j + 1 + neighborDeltas[k + 1]]) neighborCount++; //+1 accounts for border cells

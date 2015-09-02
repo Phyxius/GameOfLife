@@ -5,7 +5,7 @@ import java.awt.event.ActionEvent;
  * Shea Polansky
  * Helper class to transform Runnables (and therefore lambdas) into Actions
  */
-public class RunnableActionAdapter extends AbstractAction
+class RunnableActionAdapter extends AbstractAction
 {
   private final Runnable runnable;
 

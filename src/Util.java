@@ -4,9 +4,9 @@ import java.util.Random;
  * Created by Shea on 2015-08-30.
  * Utilities class
  */
-public class Util
+class Util
 {
-  private Util() throws Exception
+  private Util()
   {
   }
 
