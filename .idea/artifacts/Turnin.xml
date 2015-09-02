@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Turnin">
+    <output-path>$PROJECT_DIR$/out/artifacts/Turnin</output-path>
+    <root id="archive" name="Turnin.zip">
+      <element id="artifact" artifact-name="Lab 2:jar" />
+      <element id="dir-copy" path="$PROJECT_DIR$" />
+    </root>
+  </artifact>
+</component>
