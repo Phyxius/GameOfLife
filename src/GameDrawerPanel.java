@@ -6,7 +6,8 @@ import java.util.concurrent.CyclicBarrier;
 
 /**
  * Shea Polansky
- * Class name and description goes here
+ * GameDrawerPanel: draws a Life simulation, manages updates for the simulation, and provides
+ * an external interface to control the simulation
  */
 public class GameDrawerPanel extends JPanel
 {
@@ -49,6 +50,9 @@ public class GameDrawerPanel extends JPanel
     resetToRandomState(false);
   }
 
+  /**
+   * Sets the scroll bars to have the correct position, visible amount, min, and max
+   */
   private void updateScrollBars()
   {
     horizontalScrollBar.setValues(pixelOffsetX, getVisibleGridWidth(), 0, GAME_SIZE - getVisibleGridWidth());
@@ -61,6 +65,10 @@ public class GameDrawerPanel extends JPanel
     return new Dimension(800, 600);
   }
 
+  /**
+   * Resets the game state to a random one, with each cell having a 50/50 chance to be alive/dead
+   * @param triggerCallback If true, the operationCompleteCallback will be called after the reset is complete
+   */
   public void resetToRandomState(boolean triggerCallback)
   {
     for (int i = 1; i <= GAME_SIZE; i++)
@@ -74,6 +82,9 @@ public class GameDrawerPanel extends JPanel
     if (triggerCallback) operationCompleteCallback.run();
   }
 
+  /**
+   * Kills every cell, leaving with a blank slate
+   */
   private void resetToBlankState()
   {
     for (int i = 1; i <= GAME_SIZE; i++)
@@ -86,6 +97,10 @@ public class GameDrawerPanel extends JPanel
     repaint();
   }
 
+  /**
+   * Loads the given preset's game state, initial viewport, and pixel size
+   * @param preset the preset to load
+   */
   public void loadState(GameStatePreset preset)
   {
     resetToBlankState();
@@ -132,6 +147,9 @@ public class GameDrawerPanel extends JPanel
     }
   }
 
+  /**
+   * Callback for handling swapping of next/last game states, repaints, and (if necessary) automatic stopping of the simulation
+   */
   private void onUpdateComplete()
   {
     if (synchronizationBarrier == null) return;
@@ -146,6 +164,11 @@ public class GameDrawerPanel extends JPanel
     }
   }
 
+  /**
+   * Starts the simulation using the given thread count
+   * Does nothing if the simulation is currently running
+   * @param threadCount the number of threads to use
+   */
   public void play(int threadCount)
   {
     if (synchronizationBarrier != null) stop();
@@ -158,6 +181,10 @@ public class GameDrawerPanel extends JPanel
     }
   }
 
+  /**
+   * Stops the simulation, signalling the threads to stop at their earliest convenience.
+   * Does nothing if the simulation is not running.
+   */
   public void stop()
   {
     if (synchronizationBarrier == null) return;
@@ -171,6 +198,10 @@ public class GameDrawerPanel extends JPanel
     advanceSingleFrame = false;
   }
 
+  /**
+   * Runs the simulation for a single frame using the specified number of threads
+   * @param threadCount the number of threads to use
+   */
   public void advanceFrame(int threadCount)
   {
     if (synchronizationBarrier != null) return;
@@ -178,21 +209,35 @@ public class GameDrawerPanel extends JPanel
     play(threadCount);
   }
 
+  /**
+   * @return the height of the visible portion of the grid
+   */
   private int getVisibleGridHeight()
   {
     return getHeight() / pixelSize;
   }
 
+  /**
+   * @return the width of the visible portion of the grid
+   */
   private int getVisibleGridWidth()
   {
     return getWidth() / pixelSize;
   }
 
+  /**
+   * @return the dimensions of the visible portion of the grid
+   */
   public Dimension getScreenGridSize()
   {
     return new Dimension(getVisibleGridWidth(), getVisibleGridHeight());
   }
 
+  /**
+   * Scrolls the x and y offsets by the specified amount
+   * @param xAmount the amount to move in the x direction
+   * @param yAmount the amount to move in the y direction
+   */
   public void scrollRelative(int xAmount, int yAmount)
   {
     pixelOffsetX = Util.clampInteger(pixelOffsetX + xAmount, 0, GAME_SIZE - getScreenGridSize().width);
@@ -201,6 +246,11 @@ public class GameDrawerPanel extends JPanel
     repaint();
   }
 
+  /**
+   * Sets the screen position to the specified position
+   * @param x the x to set
+   * @param y the y to set
+   */
   public void scrollAbsolute(int x, int y)
   {
     pixelOffsetX = x;
@@ -209,28 +259,48 @@ public class GameDrawerPanel extends JPanel
     repaint();
   }
 
+  /**
+   * Sets the horizontal position to the specified value
+   * @param x the value to set
+   */
   public void scrollXAbsolute(int x)
   {
     pixelOffsetX = x;
     repaint();
   }
 
+  /**
+   * Sets the vertical position to the specified value
+   * @param y the position to set
+   */
   public void scrollYAbsolute(int y)
   {
     pixelOffsetY = y;
     repaint();
   }
 
+  /**
+   * Converts a point in screen coordinates to the closest grid coordinate
+   * @param p the point to convert
+   * @return the converted point
+   */
   public Point screenToGridCoordinates(Point p)
   {
     return new Point((p.x + pixelOffsetX) / pixelSize, (p.y + pixelOffsetY) / pixelSize);
   }
 
+  /**
+   * Sets the zoom level to the specified size, clamped to be between MIN_PIXEL_SIZE and MAX_PIXEL_SIZE
+   * @param newSize new size of a single pixel
+   */
   public void setZoom(int newSize)
   {
     pixelSize = Util.clampInteger(newSize, MIN_PIXEL_SIZE, MAX_PIXEL_SIZE);
   }
 
+  /**
+   * Updates the scroll bar values when the window is resized
+   */
   private class ResizeHandler extends ComponentAdapter
   {
     @Override
@@ -240,6 +310,9 @@ public class GameDrawerPanel extends JPanel
     }
   }
 
+  /**
+   * Handles mouse input (scrolling/zooming/cell toggling)
+   */
   private class MouseHandler extends MouseInputAdapter
   {
     Point currentPoint = new Point();

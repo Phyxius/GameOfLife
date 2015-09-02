@@ -3,7 +3,7 @@ import java.awt.event.ActionEvent;
 
 /**
  * Shea Polansky
- * Class name and description goes here
+ * Helper class to transform Runnables (and therefore lambdas) into Actions
  */
 public class RunnableActionAdapter extends AbstractAction
 {

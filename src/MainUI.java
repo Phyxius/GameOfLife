@@ -3,8 +3,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 /**
- * Created by Shea on 2015-08-27.
- * Class name and description go here.
+ * Shea Polansky
+ * The top level portion of the user interface.
+ * Contains several buttons, a drop down for preset loading, a spinner for thread count selection,
+ * and the main simulator panel.
  */
 public class MainUI extends JFrame
 {
@@ -57,11 +59,20 @@ public class MainUI extends JFrame
     setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
   }
 
+  /**
+   * Helper method to add padding to a panel that uses a BoxLayout
+   * @param buttonPanel the panel to add padding to
+   */
   private void addPadding(JPanel buttonPanel)
   {
     buttonPanel.add(Box.createHorizontalStrut(BUTTON_PADDING));
   }
 
+  /**
+   * Calls reset on the gamePanel, and disables the UI while it waits for the operation to finish
+   * ActionListener target
+   * @param e ignored
+   */
   private void reset(ActionEvent e)
   {
     toggleUIEnabled();
@@ -69,18 +80,31 @@ public class MainUI extends JFrame
     gamePanel.reset();
   }
 
+  /**
+   * Toggles the UI, and the game state
+   * ActionListener target
+   * @param e ignored
+   */
   private void playPause(ActionEvent e)
   {
     toggleUIEnabled();
     gamePanel.playPause((int) threadSpinner.getValue());
   }
 
+  /**
+   * Turns the UI off, and signals the gamePanel to advance a single frame
+   * @param e ignored
+   */
   private void advanceFrame(ActionEvent e)
   {
     toggleUIEnabled();
     gamePanel.advanceFrame((int) threadSpinner.getValue());
   }
 
+  /**
+   * Toggles various elements of the UI to on/off, toggles the text of the play button to play/paused,
+   * and makes sure it is enabled.
+   */
   private void toggleUIEnabled()
   {
     boolean isPaused = playPauseButton.getText().equals(PLAY_TEXT);

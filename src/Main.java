@@ -2,7 +2,7 @@ import javax.swing.*;
 
 /**
  * Shea Polansky
- * Class name and description goes here
+ * The main class
  */
 public class Main
 {

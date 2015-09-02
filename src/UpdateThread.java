@@ -3,7 +3,7 @@ import java.util.concurrent.CyclicBarrier;
 
 /**
  * Shea Polansky
- * Class name and description goes here
+ * UpdateThread: updates a game of life simulation, synchronized with other threads.
  */
 public class UpdateThread extends Thread
 {
@@ -23,6 +23,9 @@ public class UpdateThread extends Thread
     this.synchronizationBarrier = synchronizationBarrier;
   }
 
+  /**
+   * Begins updating its portion of the board in a loop, waiting for other threads to finish after each update
+   */
   @Override
   public void run()
   {
@@ -46,7 +49,7 @@ public class UpdateThread extends Thread
           }
           if (source[i + 1][j + 1])
           {
-            destination[i + 1][j + 1] = neighborCount >= 2 && neighborCount <= 3; //+1 to account for border cells
+            destination[i + 1][j + 1] = neighborCount >= 2 && neighborCount <= 3;
           }
           else destination[i + 1][j + 1] = neighborCount == 3;
         }
@@ -65,6 +68,9 @@ public class UpdateThread extends Thread
     }
   }
 
+  /**
+   * Signals to the thread that it should exit at the next opportunity
+   */
   public void end()
   {
     hasEnded = true;

@@ -3,15 +3,22 @@ import java.util.ArrayList;
 
 /**
  * Shea Polansky
- * Class name and description goes here
- */
+ * GameStatePresets: Container class for various preset game states
+*/
 public class GameStatePresets
 {
+  /**
+   * Private because this class has no non-static members
+   */
   private GameStatePresets()
   {
 
   }
 
+  /**
+   * Finds all inner classes of this one that extend GameStatePreset and instantiates one each.
+   * @return an array of GameStatePresets
+   */
   public static GameStatePreset[] getPresets()
   {
     ArrayList<GameStatePreset> presets = new ArrayList<>();
@@ -29,7 +36,10 @@ public class GameStatePresets
     return presets.toArray(new GameStatePreset[presets.size()]);
   }
 
-  //from: http://conwaylife.com/wiki/3-engine_Cordership_gun
+  /**
+   * from: http://conwaylife.com/wiki/3-engine_Cordership_gun
+   * A gun that fires corderships
+   */
   public static class ShipGun extends GameStatePreset
   {
     @Override
@@ -51,7 +61,10 @@ public class GameStatePresets
     }
   }
 
-  //from: http://www.conwaylife.com/wiki/Turing_machine
+  /**
+   * from: http://www.conwaylife.com/wiki/Turing_machine
+   * A turing machine. Sadly, the Universal Turing Machine did not fit on this board.
+   */
   public static class TuringMachine extends GameStatePreset
   {
     @Override
@@ -73,7 +86,10 @@ public class GameStatePresets
     }
   }
 
-  //from: http://conwaylife.com/wiki/Ring_of_fire
+  /**
+   * from: http://conwaylife.com/wiki/Ring_of_fire
+   * A 2-period oscillator
+   */
   public static class RingOfFire extends GameStatePreset
   {
     @Override
@@ -95,7 +111,10 @@ public class GameStatePresets
     }
   }
 
-  //from: http://conwaylife.com/wiki/3-engine_Cordership_rake
+  /**
+   * from: http://conwaylife.com/wiki/3-engine_Cordership_rake
+   * A rake (a ship that leaves a trail of more ships)
+   */
   public static class CordershipRake extends GameStatePreset
   {
     @Override
@@ -117,7 +136,12 @@ public class GameStatePresets
     }
   }
 
-  //from: http://conwaylife.com/wiki/Fermat_prime_calculator
+  /**
+   * from: http://conwaylife.com/wiki/Fermat_prime_calculator
+   * A calculator of Fermat primes. The pattern destroys a section of itself when a Fermat prime is found.
+   * a number N is tested for Fermat primality around generation 120N-550, and the pattern is rigged to completely
+   * self-destruct if a Fermat prim larger than 65537 (the largest known) is found.
+   */
   public static class FermatPrimeCalculator extends GameStatePreset
   {
     @Override
@@ -145,6 +169,9 @@ public class GameStatePresets
     }
   }
 
+  /**
+   * An empty board.
+   */
   public static class Blank extends GameStatePreset
   {
     @Override
