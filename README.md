@@ -5,7 +5,7 @@ This was an assignment in CS351: Design of Large Programs. It is a multithreaded
 * scrollable with either click-n-drag, scrollbars, or cursor/page up/page down keys.
  * 'Reset' button will re-seed the grid with random values
  The spinner next to the play button selects the number of threads.
-  * Allowed values are in [1, NUM_CPU_CORES * 2] (to allow for testing of what happens when more threads than cores are used)
+  * Allowed values are in [1, NUM_CPU_CORES * 2] \(to allow for testing of what happens when more threads than cores are used)
       * This number is calculated at the start of the program, so you will have to restart it if you somehow manage to add more CPUs to a live system
   * The dropdown selects a preset for the load button to load
   * Contains 6 presets:
