@@ -18,3 +18,4 @@ This was an assignment in CS351: Design of Large Programs. It is a multithreaded
       * The pattern destroys a section of itself when a Fermat prime is found.
       * A number N is tested for Fermat primality around generation 120N-550, and the pattern destroys a section of itself each time a prime is found
       * the pattern is rigged to completely self-destruct if a Fermat prime larger than 65537 (the largest known) is found.
+			[![Run on Repl.it](https://repl.it/badge/github/Phyxius/GameOfLife)](https://repl.it/github/Phyxius/GameOfLife)

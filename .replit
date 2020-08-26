@@ -1,0 +1,2 @@
+language = "java10"
+run = "javac src/GameDrawerPanel.java src/GameOfLifePanel.java src/GameStatePreset.java src/Main.java src/MainUI.java src/RunnableActionAdapter.java src/UpdateThread.java src/Util.java; clear; java Main"
